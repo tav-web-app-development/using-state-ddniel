@@ -1,28 +1,32 @@
-export default function ProductCard({ product }) {
-  let currentImageIndex = 0;
-  let itemsInCart = 0;
+import { useState } from "react";
 
-  const handleAddToCartClick = () => {
-    itemsInCart++;
-    alert(`you added ${itemsInCart}`);
-  };
+
+export default function ProductCard({ product }) {
+
+  const [itemsInCart, setItemsInCart] = useState(1)
+
+  const [imageIndex, setImageIndex] = useState(0)
+  const [showDescription, setShowDescription] = useState(false)
+
+  
+  
+
   return (
     <>
       <div id="image-carousel">
         <img
-          src={product.imageUrls[currentImageIndex] + " " + product.name}
+          src={product.imageUrls[imageIndex] + " " + product.name}
           alt={product.name}
         />
-        <button>Next</button>
-        <button>Previous</button>
+        <button onClick={() => (setImageIndex(imageIndex + 1))} disabled={imageIndex >= product.imageUrls.length-1} >Next</button>
+        <button onClick={() => (setImageIndex(imageIndex - 1))} disabled={imageIndex <= 0}>Previous</button>
       </div>
 
       <h3>{product.name}</h3>
-      <p>{product.description}</p>
-      <button>Show Description</button>
+      <p>{showDescription ? product.description : ""}</p>
+      <button onClick={() => (setShowDescription(!showDescription)) } >{showDescription ? 'Hide Description': 'Show Description'}</button>
       <div className="price">${product.price}</div>
-
-      <button onClick={handleAddToCartClick}>Add to Cart</button>
+      <button onClick={() => {setItemsInCart(itemsInCart +1); alert(itemsInCart)}}>Add to Cart</button>
 
       {!product.isInStock && "The product is out of stock"}
     </>
